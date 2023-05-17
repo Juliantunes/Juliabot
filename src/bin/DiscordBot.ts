@@ -24,9 +24,9 @@ export class DiscordBot {
         })
 
         this.client.on('ready', () => {
-            console.log('JuliasBot is online'); 
+            console.log('JuliasBot is enabled!'); 
         });
         
-        this.client.login('MTEwMzQxNDE2Njc0MTU5ODMyOA.GONSj3.Nv-YYu_QF2TB4sme3YpVWhmdxkgt34jBIBcIk4')
+        this.client.login('MTEwMzQxNDE2Njc0MTU5ODMyOA.GglWT5.m_DvK7gm2E6lrDwSBCfCEbaj4L5zO1FqNLt_g0')
     }
 }
