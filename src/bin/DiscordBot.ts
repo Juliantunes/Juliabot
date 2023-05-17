@@ -27,6 +27,6 @@ export class DiscordBot {
             console.log('JuliasBot is enabled!'); 
         });
         
-        this.client.login('MTEwMzQxNDE2Njc0MTU5ODMyOA.GglWT5.m_DvK7gm2E6lrDwSBCfCEbaj4L5zO1FqNLt_g0')
+        this.client.login(process.env.DISCORD_TOKEN);
     }
 }
