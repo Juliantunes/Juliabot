@@ -1,0 +1,15 @@
+{
+  "dependencies": {
+    "discord.js": "^14.10.2",
+    "node-cron": "^3.0.2",
+    "node.js": "^0.0.1-security",
+    "typescript": "^5.0.4"
+  },
+  "name": "Juliabot",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "devDependencies": {
+    "tsc": "^2.0.4"
+  }
+}
