@@ -4,6 +4,8 @@ import { SpecificTime } from "./subcommands/SpecificTime";
 import { SpecificDateTime } from "./subcommands/SpecificDateTime";
 import { Tomorrow } from "./subcommands/Tomorrow";
 import { RelativeTime } from "./subcommands/RelativeTime";
+import { SpecificDate } from "./subcommands/SpecificDate";
+
 
 
 
@@ -46,6 +48,9 @@ export class Remind implements Command {
         if (this.HMformat(parts[parts.length-2]) && this.date(parts[parts.length-1])){
             SpecificDateTime.handle(message, parts.slice(1,parts.length-2).join(' '), parts[parts.length-1], parts[parts.length-2])
         }
+        //<"!remind"> <event> <date>
+    
+
 
          //<!remind> <event> <tomorrow>  or <!remind> <event> <tomorrow> <HH:MM> (Tomorrow)
         if(message.content.includes("tomorrow")){
@@ -57,14 +62,17 @@ export class Remind implements Command {
             }
          }
 
-            //"!remind <event> <date MM/DD/YY>" or  //"!<remind <event> <relative time format>" (Relative Time)
-        if (this.date(parts[parts.length - 1]) || this.relativeDate(parts[parts.length-1])) {
-            if (this.relativeDate(parts[parts.length-1])){
-                RelativeTime.handle(parts.slice(1, -1).join(' '), parts[parts.length-1])
+       //"!<remind <event> <relative time format>" (Relative Time)
+        if (message.content.includes(" in ")) {
+            const parts = message.content.split(" in ");
+            const timeString = parts.pop();
+            if (timeString) {
+                const event = parts.join(" in ").trim().replace("!remind", "");
+                const CleanedUpTimeString = timeString.replace(/\s+and\s+/g, ", ")
+                RelativeTime.handle(message, event, CleanedUpTimeString);
+            } else {
+          
             }
-            else{
-                RelativeTime.handle(parts.slice(1,-1).join(' '),(parts[parts.length-1]))
-            }
-        }
-    }
+          }
+    } 
 }

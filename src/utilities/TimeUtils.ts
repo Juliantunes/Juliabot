@@ -91,6 +91,32 @@ export function convertDateToUnix(date: string): number {
     }
 }
 
+export function convertToUnixFromRelativeTime(relativeTime:string) {
+    // "5 days, 6 hours and 3 minutes" .split(" and ")
+    // ["5 days, 6 hours", "3 minutes"] .split(",") [in a loop]
+    // [["5 days", "6 hours"], ["3 minutes"]] [flatten result array]
+    // ["5 days", "6 hours", "3 minutes"] DONE!
+
+    
+    let timeGiven = relativeTime.replace("and", "").trim().split(",");
+    let convertedTime = timeGiven.map(item => item.trim().split(' '));
+
+    let secondsToAdd = 0;
+    for(const individualArray of convertedTime) {
+        if(individualArray[1].toLowerCase().includes('day')){
+            secondsToAdd += parseInt(individualArray[0]) * 86400
+        }
+        else if(individualArray[1].toLowerCase().includes('hour')){
+            secondsToAdd += parseInt(individualArray[0]) * 3600
+        }
+        else if (individualArray[1].toLowerCase().includes('minute')){
+            secondsToAdd += parseInt(individualArray[0]) * 60
+        }
+    }
+
+    return Date.now() + (secondsToAdd * 1000);
+}
+
 
 
 

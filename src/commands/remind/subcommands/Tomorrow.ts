@@ -3,6 +3,5 @@ export class Tomorrow {
         if(time == null){
             
         }
-        
     }
 }
