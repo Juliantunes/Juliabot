@@ -5,6 +5,7 @@ import { SpecificDateTime } from "./subcommands/SpecificDateTime";
 import { Tomorrow } from "./subcommands/Tomorrow";
 import { RelativeTime } from "./subcommands/RelativeTime";
 import { SpecificDate } from "./subcommands/SpecificDate";
+import { HMformat } from "../../utilities/TimeUtils";
 
 
 
@@ -40,30 +41,38 @@ export class Remind implements Command {
 
     public receiver(message: Message) {
         const parts = message.content.split(" ")
+        //<!remind> <event> <tomorrow>  or <!remind> <event> <tomorrow> <HH:MM> (Tomorrow)
+
+        // !remind laundry tomorrow 5:30pm
+        // !remind laundry tomorrow at 5:30pm
+        if(parts[parts.length-1].toLowerCase() === "tomorrow" || parts[parts.length-2].toLowerCase() === "tomorrow"
+        || (parts[parts.length-3].toLowerCase() === "tomorrow" && parts[parts.length-2].toLowerCase() === "at")){
+            if(this.HMformat(parts[parts.length-1])) {
+                if(parts[parts.length-2].toLowerCase() === "at"){
+                    Tomorrow.handle(message, parts.slice(1, -4).join(" "), parts[parts.length-1])
+                }else{
+                    Tomorrow.handle(message, parts.slice(1, -3).join(" "), parts[parts.length-1])
+                }
+            }
+            else if(parts[parts.length-1] === "tomorrow"){
+                Tomorrow.handle(message, parts.slice(1, -2).join(" "))
+            }
+        }
+
         //"<!remind> <event> <time(HH:MM)>" (specific time)
-        if(this.HMformat(parts[parts.length-1])){
+        else if(this.HMformat(parts[parts.length-1])){
             SpecificTime.handle(message, parts.slice(1,-1).join(' '), parts[parts.length-1]);
         } 
+
+
         //<"!remind> <event> <HH:MM> <date>" (specific Date/time)
-        if (this.HMformat(parts[parts.length-2]) && this.date(parts[parts.length-1])){
+        else if (this.HMformat(parts[parts.length-2]) && this.date(parts[parts.length-1])){
             SpecificDateTime.handle(message, parts.slice(1,parts.length-2).join(' '), parts[parts.length-1], parts[parts.length-2])
         }
         //<"!remind"> <event> <date>
-    
 
-
-         //<!remind> <event> <tomorrow>  or <!remind> <event> <tomorrow> <HH:MM> (Tomorrow)
-        if(message.content.includes("tomorrow")){
-            if(this.HMformat(parts[parts.length-1])) {
-                Tomorrow.handle(parts.slice(1, -3).join(" "), parts[parts.length-1])
-            }
-            else{
-                Tomorrow.handle(parts.slice(1, -2).join(" "))
-            }
-         }
-
-       //"!<remind <event> <relative time format>" (Relative Time)
-        if (message.content.includes(" in ")) {
+        //"!<remind <event> <relative time format>" (Relative Time)
+        else if (message.content.includes(" in ")) {
             const parts = message.content.split(" in ");
             const timeString = parts.pop();
             if (timeString) {

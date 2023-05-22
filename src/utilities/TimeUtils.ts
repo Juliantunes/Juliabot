@@ -43,6 +43,11 @@ export function convertToUnixFromTime (time:string):number {
     //return Math.floor(date.getTime()/1000)
 }
 
+export function HMformat(time:string) {
+    const regex = /^(1[0-2]|0?[1-9]):([0-5][0-9])(\s?[ap]m)$|^(1[0-2]|0?[1-9])(\s?[ap]m)$/
+    return regex.test(time.toLowerCase())
+}
+
 export function handleAMOrPM(timeString: string) {
     let amOrPm: "am" | "pm" = "am";
     let numerizedTimeString: number = -1;
