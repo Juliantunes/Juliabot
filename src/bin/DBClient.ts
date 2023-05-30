@@ -13,9 +13,30 @@ export class DBClient {
         console.log("Connected!");
     }
 
+    async loadAllReminders(){
+        try {
+            const reminders = await Reminder.find()
+            if(reminders){
+               console.log("Reminders loaded:", reminders)
+            }
+            else {
+               console.log("Reminders not found")
+            }
+           }
+           catch (error) {
+               console.error('An error occured with loading process', error)
+   
+               throw new Error('Failed to load reminders.')
+   
+           }
+       }
+   
+        
+
+
     async deleteExpiredReminders() {
        try{ 
-        const currentTimeStamp = Date.now();
+        const currentTimeStamp = Math.floor(Date.now() / 1000);
         const result = await Reminder.deleteMany({ timeStamp: { $lt: currentTimeStamp } });
 
         if (result.deletedCount>0){
@@ -33,6 +54,8 @@ export class DBClient {
         }
         
     }
+
+
 
     async loadReminder(reminderId:string) {
         try {
