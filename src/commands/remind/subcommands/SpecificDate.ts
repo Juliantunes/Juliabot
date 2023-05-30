@@ -10,7 +10,7 @@ export class SpecificDate {
        let targetDate = convertDateToUnix(date)
        let timeToWait = targetDate 
 
-        scheduleMessage(timeToWait, message.channel, event)
+        scheduleMessage(message.author.id,timeToWait, message.channel, event)
        message.reply(`Reminder scheduled for ${(new Date(targetDate)).toLocaleString('en-US', { 
            timeZone: 'America/New_York' 
        })}`)

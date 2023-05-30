@@ -79,8 +79,6 @@ export class Remind implements Command {
                 const event = parts.join(" in ").trim().replace("!remind", "");
                 const CleanedUpTimeString = timeString.replace(/\s+and\s+/g, ", ")
                 RelativeTime.handle(message, event, CleanedUpTimeString);
-            } else {
-          
             }
           }
     } 

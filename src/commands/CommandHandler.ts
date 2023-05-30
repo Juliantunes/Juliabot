@@ -29,5 +29,8 @@ export class CommandHandler {
         if(this.commands[commandName] == null) return;
         
         this.commands[commandName].receiver(message);
+
+        const test = message.author.id;
     }
 }
+

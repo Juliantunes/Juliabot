@@ -7,7 +7,7 @@ import { Message, TextChannel, time } from "discord.js";
 export class RelativeTime {
     static handle(message: Message, event:string, time:string){
         let newTime = convertToUnixFromRelativeTime(time)
-        scheduleMessage(newTime, message.channel, event) 
+        scheduleMessage(message.author.id,newTime, message.channel, event) 
 
         message.reply(`Reminder scheduled for ${(new Date(newTime)).toLocaleString('en-US', { 
             timeZone: 'America/New_York' 
