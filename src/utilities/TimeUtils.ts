@@ -137,12 +137,14 @@ export const sendMessage = (channel: Discord.TextBasedChannel, message:string) =
     channel.send(message)
 }
 
-export const scheduleMessage = (userId: string, time:number, channel:Discord.TextBasedChannel, message: string) =>{
+export const scheduleMessage = (userId: string | undefined, time:number, channel:Discord.TextBasedChannel, message: string) =>{
     const remind = new Reminder({
         userID: userId,
         timeStamp:time,
         event:message,
+        channel: channel
     });
+    
     remind.save();
     const currentTime = new Date().getTime()
     const timeToWait = time-currentTime

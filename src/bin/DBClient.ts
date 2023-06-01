@@ -1,6 +1,8 @@
 import mongoose from "mongoose";
 import { Reminder } from "../definitions/ReminderModel";
 import { scheduleMessage } from "../utilities/TimeUtils";
+import { Client, TextBasedChannel } from "discord.js";
+
 
 export class DBClient {
     db: typeof mongoose | null;
@@ -25,17 +27,27 @@ export class DBClient {
       }
       
 
-       async processReminders() {
+      async processReminders(client: Client) {
         const reminders = await this.loadAllReminders(); // Load all reminders from the database
-      
+    
         for (const reminder of reminders) {
           const currentTime = Date.now();
           if (reminder.timeStamp !== undefined && reminder.timeStamp > currentTime) {
             // Schedule reminder for message sending
-            scheduleMessage(reminder.userId, reminder.timeStamp, reminder.channel, reminder.event);
+            if (reminder.channel) {
+              const channel = client.channels.cache.get(reminder.channel) as TextBasedChannel | undefined;
+              if (channel) {
+                scheduleMessage(reminder.userId, reminder.timeStamp, channel, reminder.event as string );
+              } else {
+                console.error(`Channel not found for reminder: ${reminder._id}`);
+              }
+            } else {
+              console.error(`Channel not defined for reminder: ${reminder._id}`);
+            }
           }
         }
       }
+      
    
         
 
