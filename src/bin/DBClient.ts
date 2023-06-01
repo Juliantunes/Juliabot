@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import { Reminder } from "../definitions/ReminderModel";
+import { scheduleMessage } from "../utilities/TimeUtils";
 
 export class DBClient {
     db: typeof mongoose | null;
@@ -13,23 +14,28 @@ export class DBClient {
         console.log("Connected!");
     }
 
-    async loadAllReminders(){
+    async loadAllReminders() {
         try {
-            const reminders = await Reminder.find()
-            if(reminders){
-               console.log("Reminders loaded:", reminders)
-            }
-            else {
-               console.log("Reminders not found")
-            }
-           }
-           catch (error) {
-               console.error('An error occured with loading process', error)
-   
-               throw new Error('Failed to load reminders.')
-   
-           }
-       }
+          const reminders = await Reminder.find(); // Retrieve all reminders from the database
+          return reminders; // Return the loaded reminders
+        } catch (error) {
+          console.error("Failed to load reminders:", error);
+          throw new Error("Failed to load reminders");
+        }
+      }
+      
+
+       async processReminders() {
+        const reminders = await this.loadAllReminders(); // Load all reminders from the database
+      
+        for (const reminder of reminders) {
+          const currentTime = Date.now();
+          if (reminder.timeStamp !== undefined && reminder.timeStamp > currentTime) {
+            // Schedule reminder for message sending
+            scheduleMessage(reminder.userId, reminder.timeStamp, reminder.channel, reminder.event);
+          }
+        }
+      }
    
         
 

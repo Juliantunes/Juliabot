@@ -1,6 +1,7 @@
 import Discord, { GatewayIntentBits, Message } from "discord.js";
 import { Remind } from "../commands/remind/Remind";
 import { Reminder } from "../definitions/ReminderModel";
+import { TextBasedChannelMixin } from "discord.js";
 
 
 export function convertToUnixFromTime (time:string):number {
@@ -140,7 +141,7 @@ export const scheduleMessage = (userId: string, time:number, channel:Discord.Tex
     const remind = new Reminder({
         userID: userId,
         timeStamp:time,
-        event:message
+        event:message,
     });
     remind.save();
     const currentTime = new Date().getTime()
@@ -148,4 +149,5 @@ export const scheduleMessage = (userId: string, time:number, channel:Discord.Tex
     setTimeout(() => {
         sendMessage(channel, message)
     }, timeToWait)
+    
 }
