@@ -49,8 +49,6 @@ export class DBClient {
       }
       
    
-        
-
 
     async deleteExpiredReminders() {
        try{ 

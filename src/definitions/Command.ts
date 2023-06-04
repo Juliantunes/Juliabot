@@ -1,8 +1,8 @@
-import { Message, TextChannel } from "discord.js"
+import { CommandInteraction, Message, TextChannel } from "discord.js"
 
 export interface Command {
     getName: () => string;
-    receiver: (message: Message) => unknown;
+    receiver: (interaction:CommandInteraction) => unknown;
 }
 
 export interface CommandObject {

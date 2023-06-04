@@ -2,6 +2,7 @@ import { Message } from "discord.js";
 import { CommandObject } from "../definitions/Command";
 import { Hello } from "./hello/Hello";
 import { Remind } from "./remind/Remind";
+import { CommandInteraction } from "discord.js";
 
 export class CommandHandler {
     private commands: CommandObject;
@@ -16,21 +17,18 @@ export class CommandHandler {
         this.commands[remind.getName()] = remind
     }
 
-    onMessage(message: Message): void{
-        if(!message.content.startsWith("!")) return;
+    onInteraction(interaction:CommandInteraction): void{
+        if(!interaction.isCommand()) return;
 
         // "!hello world" => ["hello", "world"]
-        const commandParts = message.content.slice(1).toLowerCase().split(" ");
+        const commandName = interaction.commandName.toLowerCase();
 
         // ["hello" (THIS IS COMMAND NAME), "world"]
-        const commandName = commandParts[0];
+        if(!this.commands[commandName])return;
 
         // Check if commandName exists as a key in the commands object
-        if(this.commands[commandName] == null) return;
-        
-        this.commands[commandName].receiver(message);
-
-        const test = message.author.id;
+        this.commands[commandName].receiver(interaction)
+       
     }
 }
 

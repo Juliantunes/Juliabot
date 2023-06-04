@@ -1,5 +1,6 @@
 import { Message } from "discord.js";
 import { Command } from "../../definitions/Command";
+import { CommandInteraction } from "discord.js";
 
 export class Hello implements Command {
     private name: string;
@@ -12,7 +13,7 @@ export class Hello implements Command {
         return this.name;
     }
 
-    public receiver(message: Message){
-        message.reply('Hello, handsome!')
+    public receiver(interaction: CommandInteraction){
+        interaction.reply('Hello, handsome!')
     }
 }
