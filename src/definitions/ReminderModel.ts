@@ -8,8 +8,7 @@ import { TextBasedChannel } from "discord.js";
 const reminderSchema = new mongoose.Schema({
     userId : String, 
     timeStamp: Number, 
-    event: String,
-    channel: String
+    event: String
 })
 
 export const Reminder = mongoose.model('Reminder', reminderSchema);
