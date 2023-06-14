@@ -5,10 +5,10 @@ import Discord from "discord.js"
 import { TextBasedChannel } from "discord.js";
 
 
-const reminderSchema = new mongoose.Schema({
+let reminderSchema = new mongoose.Schema({
     userId : String, 
     timeStamp: Number, 
     event: String
 })
 
-export const Reminder = mongoose.model('Reminder', reminderSchema);
+module.exports = mongoose.model('Reminder', reminderSchema);
