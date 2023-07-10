@@ -8,7 +8,7 @@ export function convertToUnixFromTime (time:string):number {
     // 5PM = 5:00+12:00
     // 5AM = 5:00
     // 5:08AM/PM
-    // 05:08AM/PM
+    // 05:08AM/PMd
     let hour, minute, amOrPm: "am" | "pm" = "am";
     // Handles 5:00AM/PM and 05:00AM/PM
     if(time.includes(":")){
