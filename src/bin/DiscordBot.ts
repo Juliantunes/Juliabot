@@ -1,10 +1,8 @@
-import Discord, { GatewayIntentBits, Message } from "discord.js";
+import Discord, { GatewayIntentBits, Message, REST, Routes } from "discord.js";
 import { CommandHandler } from "../commands/CommandHandler";
 import { DBClient } from "./DBClient";
 import { Interaction } from "discord.js";
 import { CommandInteraction } from "discord.js";
-
-
 
 export class DiscordBot {
     private client: Discord.Client
@@ -32,14 +30,22 @@ export class DiscordBot {
 
         await (new DBClient()).start();
 
-
         this.client.on('ready', async () => {
             console.log('JuliasBot is enabled!'); 
-
-        
-
-
         });
+
+        const rest = new REST().setToken(process.env.DISCORD_TOKEN ?? "");
+        
+        try{
+            await rest.put(
+                Routes.applicationGuildCommands("", ""),
+                {
+                    body: this.handler.getCommandData()
+                }
+            )
+        }catch(err){
+
+        }
         
         this.client.login(process.env.DISCORD_TOKEN);
     }

@@ -4,13 +4,19 @@ import { CommandInteraction } from "discord.js";
 
 export class Hello implements Command {
     private name: string;
+    private commandData: {};
 
     constructor(){
         this.name = "hello";
+        this.commandData = {};
     }
 
     public getName(){
         return this.name;
+    }
+
+    public getCommandData(){
+        return this.commandData;
     }
 
     public receiver(interaction: CommandInteraction){

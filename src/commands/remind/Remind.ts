@@ -1,60 +1,107 @@
-import { CommandInteraction, TextChannel } from "discord.js";
+import { Message, SlashCommandBuilder } from "discord.js";
 import { Command } from "../../definitions/Command";
-import { SpecificTime } from "./subcommands/SpecificTime";
-import { SpecificDateTime } from "./subcommands/SpecificDateTime";
-import { Tomorrow } from "./subcommands/Tomorrow";
-import { RelativeTime } from "./subcommands/RelativeTime";
-import { SpecificDate } from "./subcommands/SpecificDate";
-import { HMformat } from "../../utilities/TimeUtils";
-import { commandData } from "../../utilities/RemindData";
+import { CommandInteraction } from "discord.js";
+
 export class Remind implements Command {
-  private name: string;
+    private name: string;
+    private commandData: SlashCommandBuilder;
 
-  constructor() {
-    this.name = "remind";
-  }
+    constructor(){
+        this.name = "hello";
+        this.commandData = new SlashCommandBuilder();
 
-  public getName() {
-    return this.name;
-  }
-
-  public receiver(interaction: CommandInteraction) {
-    const event = interaction.options.get('event')?.value as string;
-
-    if (event) {
-      const timeOption = interaction.options.getString('time');
-
-      // Handle different time options
-      if (timeOption === 'hh:mm') {
-        // Handle HH:MM format
-        const time = interaction.options.getString('time');
-
-        if (time) {
-          SpecificTime.handle(interaction, event, time);
-        } else {
-          // Time option is required, but no value provided
-          interaction.reply('Please provide a valid time in HH:MM format.');
-        }
-      } else if (timeOption === 'yyyy-mm-dd hh:mm') {
-        // Handle YYYY-MM-DD HH:MM format
-        const time = interaction.options.getString('time');
-
-        if (time) {
-          SpecificDateTime.handle(interaction, event, time);
-        } else {
-          // Time option is required, but no value provided
-          interaction.reply('Please provide a valid date and time in YYYY-MM-DD HH:MM format.');
-        }
-      } else if (timeOption === 'x-hours') {
-        // Handle X hours from now format
-        // ... handle this format accordingly
-      } else {
-        // Invalid time option selected
-        interaction.reply('Invalid time option selected.');
-      }
-    } else {
-      // Event option is required, but no value provided
-      interaction.reply('Please provide an event or task.');
+        this.commandData
+            .setName("remind")
+            .setDescription("Remind yourself of an event at a later time")
+            .addSubcommand((subcommand) => {
+                return subcommand
+                    .setName("time")
+                    .setDescription("Remind yourself at a specific time and/or date")
+                    .addStringOption((option) => {
+                        return option
+                            .setName("event")
+                            .setDescription("Event to be reminded of")
+                    })
+                    .addIntegerOption((option) => {
+                        return option
+                            .setName("hour")
+                            .setDescription("Hour to be reminded at")
+                    })
+                    .addIntegerOption((option) => {
+                        return option
+                            .setName("minute")
+                            .setDescription("Minute to be reminded at")
+                    })
+                    .addStringOption((option) => {
+                        return option
+                            .setName("date")
+                            .setRequired(false)
+                            .setDescription("Date to be reminded at (MM/DD/YY)")
+                    })
+            })
+            .addSubcommand((subcommand) => {
+                return subcommand
+                    .setName("date")
+                    .setDescription("Remind yourself at a specific date")
+                    .addStringOption((option) => {
+                        return option
+                            .setName("event")
+                            .setDescription("Event to be reminded of")
+                    })
+                    .addStringOption((option) => {
+                        return option
+                            .setName("date")
+                            .setDescription("Date to be reminded at (MM/DD/YY)")
+                    })
+            })
+            .addSubcommand((subcommand) => {
+                return subcommand
+                    .setName("relative")
+                    .setDescription("Remind yourself at a relative time")
+                    .addStringOption((option) => {
+                        return option
+                            .setName("event")
+                            .setDescription("Event to be reminded of")
+                    })
+                    .addStringOption((option) => {
+                        return option
+                            .setName("relative")
+                            .setDescription("Relative time to be reminded at (Ex: 3 days, 2 hours, 5 minutes)")
+                    })
+            })
+            .addSubcommand((subcommand) => {
+                return subcommand
+                    .setName("tomorrow")
+                    .setDescription("Remind yourself tomorrow at an optional time")
+                    .addStringOption((option) => {
+                        return option
+                            .setName("event")
+                            .setDescription("Event to be reminded of")
+                    })
+                    .addIntegerOption((option) => {
+                        return option
+                            .setName("hour")
+                            .setRequired(false)
+                            .setDescription("Hour to be reminded at")
+                    })
+                    .addIntegerOption((option) => {
+                        return option
+                            .setName("minute")
+                            .setRequired(false)
+                            .setDescription("Minute to be reminded at")
+                    });
+            })
     }
-  }
+
+    public getName(){
+        return this.name;
+    }
+
+    public getCommandData(){
+        return this.commandData;
+    }
+
+    public receiver(interaction: CommandInteraction){
+        interaction.reply('Hello, handsome!')
+    }
 }
