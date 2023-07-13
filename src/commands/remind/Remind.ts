@@ -1,96 +1,42 @@
-import { Message, SlashCommandBuilder } from "discord.js";
-import { Command } from "../../definitions/Command";
+import { CacheType, Message, SlashCommandBuilder } from "discord.js";
+import { Command, SubcommandObject } from "../../definitions/Command";
 import { CommandInteraction } from "discord.js";
+import { Relative } from "./subcommands/Relative";
+import { DateCommand } from "./subcommands/DateCommand";
+import { Time } from "./subcommands/Time";
+import { Tomorrow } from "./subcommands/Tomorrow";
 
 export class Remind implements Command {
     private name: string;
     private commandData: SlashCommandBuilder;
+    private subcommands: SubcommandObject;
 
     constructor(){
-        this.name = "hello";
+        this.name = "remind";
         this.commandData = new SlashCommandBuilder();
+        this.subcommands = {};
 
+        // Add all subcommands to subcommand object
+        const relative = new Relative();
+        this.subcommands[relative.getName()] = relative;
+
+        const time = new Time();
+        this.subcommands[time.getName()] = time;
+
+        const date = new DateCommand();
+        this.subcommands[date.getName()] = date;
+
+        const tomorrow = new Tomorrow();
+        this.subcommands[tomorrow.getName()] = tomorrow;
+
+        // Load all command and subcommand data
         this.commandData
             .setName("remind")
             .setDescription("Remind yourself of an event at a later time")
-            .addSubcommand((subcommand) => {
-                return subcommand
-                    .setName("time")
-                    .setDescription("Remind yourself at a specific time and/or date")
-                    .addStringOption((option) => {
-                        return option
-                            .setName("event")
-                            .setDescription("Event to be reminded of")
-                    })
-                    .addIntegerOption((option) => {
-                        return option
-                            .setName("hour")
-                            .setDescription("Hour to be reminded at")
-                    })
-                    .addIntegerOption((option) => {
-                        return option
-                            .setName("minute")
-                            .setDescription("Minute to be reminded at")
-                    })
-                    .addStringOption((option) => {
-                        return option
-                            .setName("date")
-                            .setRequired(false)
-                            .setDescription("Date to be reminded at (MM/DD/YY)")
-                    })
-            })
-            .addSubcommand((subcommand) => {
-                return subcommand
-                    .setName("date")
-                    .setDescription("Remind yourself at a specific date")
-                    .addStringOption((option) => {
-                        return option
-                            .setName("event")
-                            .setDescription("Event to be reminded of")
-                    })
-                    .addStringOption((option) => {
-                        return option
-                            .setName("date")
-                            .setDescription("Date to be reminded at (MM/DD/YY)")
-                    })
-            })
-            .addSubcommand((subcommand) => {
-                return subcommand
-                    .setName("relative")
-                    .setDescription("Remind yourself at a relative time")
-                    .addStringOption((option) => {
-                        return option
-                            .setName("event")
-                            .setDescription("Event to be reminded of")
-                    })
-                    .addStringOption((option) => {
-                        return option
-                            .setName("relative")
-                            .setDescription("Relative time to be reminded at (Ex: 3 days, 2 hours, 5 minutes)")
-                    })
-            })
-            .addSubcommand((subcommand) => {
-                return subcommand
-                    .setName("tomorrow")
-                    .setDescription("Remind yourself tomorrow at an optional time")
-                    .addStringOption((option) => {
-                        return option
-                            .setName("event")
-                            .setDescription("Event to be reminded of")
-                    })
-                    .addIntegerOption((option) => {
-                        return option
-                            .setName("hour")
-                            .setRequired(false)
-                            .setDescription("Hour to be reminded at")
-                    })
-                    .addIntegerOption((option) => {
-                        return option
-                            .setName("minute")
-                            .setRequired(false)
-                            .setDescription("Minute to be reminded at")
-                    });
-            })
+            .addSubcommand(relative.getCommandData)
+            .addSubcommand(time.getCommandData)
+            .addSubcommand(date.getCommandData)
+            .addSubcommand(tomorrow.getCommandData)
     }
 
     public getName(){
@@ -102,6 +48,9 @@ export class Remind implements Command {
     }
 
     public receiver(interaction: CommandInteraction){
-        interaction.reply('Hello, handsome!')
+        if(!interaction.isChatInputCommand()) return;
+
+        const subcommand = this.subcommands[interaction.options.getSubcommand()];
+        subcommand.receiver(interaction);
     }
 }

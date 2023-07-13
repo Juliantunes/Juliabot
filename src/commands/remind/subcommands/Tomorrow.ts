@@ -1,16 +1,16 @@
-import { CacheType, CommandInteraction, SlashCommandSubcommandBuilder } from "discord.js";
+import { SlashCommandSubcommandBuilder, CommandInteraction, CacheType } from "discord.js";
 import { Subcommand } from "../../../definitions/Command";
 
-export class Time implements Subcommand {
+export class Tomorrow implements Subcommand{
 
     getName(): string {
-        return "time";
+        return "tomorrow";
     }
 
     getCommandData(subcommand: SlashCommandSubcommandBuilder): SlashCommandSubcommandBuilder {
         return subcommand
-            .setName("time")
-            .setDescription("Remind yourself at a specific time and/or date")
+            .setName("tomorrow")
+            .setDescription("Remind yourself tomorrow at an optional time")
             .addStringOption((option) => {
                 return option
                     .setName("event")
@@ -19,26 +19,20 @@ export class Time implements Subcommand {
             .addIntegerOption((option) => {
                 return option
                     .setName("hour")
+                    .setRequired(false)
                     .setDescription("Hour to be reminded at")
             })
             .addIntegerOption((option) => {
                 return option
                     .setName("minute")
-                    .setDescription("Minute to be reminded at")
-            })
-            .addStringOption((option) => {
-                return option
-                    .setName("date")
                     .setRequired(false)
-                    .setDescription("Date to be reminded at (MM/DD/YY)")
+                    .setDescription("Minute to be reminded at")
             });
     }
 
     receiver(interaction: CommandInteraction): unknown {
         if(!interaction.isChatInputCommand()) return;
-
         
-
         return 0;
     }
 }

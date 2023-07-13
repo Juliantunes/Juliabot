@@ -30,8 +30,9 @@ export class CommandHandler {
         return this.commandDataArray;
     }
 
-    onInteraction(interaction:CommandInteraction): void{
+    onInteraction(interaction: CommandInteraction): void{
         if(!interaction.isCommand()) return;
+        if(!interaction.isChatInputCommand()) return;
 
         // "!hello world" => ["hello", "world"]
         const commandName = interaction.commandName.toLowerCase();

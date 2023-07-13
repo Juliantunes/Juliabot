@@ -1,14 +1,14 @@
-import { Message } from "discord.js";
+import { Message, SlashCommandBuilder } from "discord.js";
 import { Command } from "../../definitions/Command";
 import { CommandInteraction } from "discord.js";
 
 export class Hello implements Command {
     private name: string;
-    private commandData: {};
+    private commandData: SlashCommandBuilder;
 
     constructor(){
         this.name = "hello";
-        this.commandData = {};
+        this.commandData = new SlashCommandBuilder();
     }
 
     public getName(){
