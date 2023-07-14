@@ -37,7 +37,7 @@ export class Time implements Subcommand {
     receiver(interaction: CommandInteraction): unknown {
         if(!interaction.isChatInputCommand()) return;
 
-        
+
 
         return 0;
     }
