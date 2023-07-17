@@ -24,8 +24,12 @@ export class DateCommand implements Subcommand {
     }
 
     receiver(interaction: CommandInteraction): unknown {
-        if(!interaction.isChatInputCommand()) return;
         
+        if(!interaction.isChatInputCommand()) return;
+        else{
+            interaction.reply('')
+        }
+       
         return 0;
     }
 }

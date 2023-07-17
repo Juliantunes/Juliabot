@@ -1,5 +1,6 @@
 import { SlashCommandSubcommandBuilder, CommandInteraction, CacheType } from "discord.js";
 import { Subcommand } from "../../../definitions/Command";
+import { scheduleMessage } from "../../../utilities/TimeUtils";
 
 export class Tomorrow implements Subcommand{
 
@@ -31,8 +32,40 @@ export class Tomorrow implements Subcommand{
     }
 
     receiver(interaction: CommandInteraction): unknown {
-        if(!interaction.isChatInputCommand()) return;
+        if(!interaction.isChatInputCommand()) {
+            return;
+        }
+        const event = interaction.options.getString("event")!
+        const hour = interaction.options.getInteger("hour")
+        const minute = interaction.options.getInteger('minute')
+        const date = new Date()
+        let unixTimeStamp = 0 
+
+        if (hour && minute) {
+
+        date.setHours(hour);
+        date.setMinutes(minute);
+        date.setSeconds(0);
+        date.setMilliseconds(0)
+
+        unixTimeStamp = Math.floor(date.getTime() / 1000) + 24 *60*60
         
-        return 0;
+
+        }
+
+        else {
+
+        date.setDate(date.getDate()+1)
+        date.setHours(0,0,0,0)
+
+        unixTimeStamp =  Math.floor(date.getTime() / 1000);
+
+
+        }
+        const ScheduledMessage = setTimeout(() => {
+            interaction.reply(event);
+          }, unixTimeStamp);
+
+        return ScheduledMessage ;
     }
 }
