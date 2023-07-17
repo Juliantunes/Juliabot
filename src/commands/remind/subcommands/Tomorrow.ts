@@ -41,7 +41,7 @@ export class Tomorrow implements Subcommand{
         const date = new Date()
         let unixTimeStamp = 0 
 
-        if (hour && minute) {
+        if (hour!== null && minute!== null && hour!==undefined && minute !== undefined) {
 
         date.setHours(hour);
         date.setMinutes(minute);
