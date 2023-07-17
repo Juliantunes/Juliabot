@@ -1,5 +1,6 @@
 import { CacheType, CommandInteraction, SlashCommandSubcommandBuilder } from "discord.js";
 import { Subcommand } from "../../../definitions/Command";
+import { convertToUnixFromRelativeTime } from "../../../utilities/TimeUtils";
 
 export class Relative implements Subcommand {
 
@@ -25,7 +26,17 @@ export class Relative implements Subcommand {
 
     receiver(interaction: CommandInteraction): unknown {
         if(!interaction.isChatInputCommand()) return;
-        
-        return 0;
+
+        const event = interaction.options.getString('event')!
+        const relative = interaction.options.getString('relative')!
+
+        const unixTimeStamp = convertToUnixFromRelativeTime(relative)
+
+        const ScheduledMessage = setTimeout(() => {
+            interaction.reply(event);
+          }, unixTimeStamp);
+
+        return ScheduledMessage ;
+
     }
 }

@@ -1,5 +1,6 @@
 import { CacheType, CommandInteraction, SlashCommandSubcommandBuilder } from "discord.js";
 import { Subcommand } from "../../../definitions/Command";
+import { convertDateToUnix } from "../../../utilities/TimeUtils";
 
 export class Time implements Subcommand {
 
@@ -36,6 +37,39 @@ export class Time implements Subcommand {
 
     receiver(interaction: CommandInteraction): unknown {
         if(!interaction.isChatInputCommand()) return;
+
+        const event = interaction.options.getString('event')!
+        const hour = interaction.options.getInteger('hour')!
+        const minute = interaction.options.getInteger('minute')!
+        const date = interaction.options.getString('date')
+        const newDate = new Date()
+        
+
+        if (date !== null) {
+
+            const UnixDate = convertDateToUnix(date)
+
+            newDate.setHours(hour)
+            newDate.setMinutes(minute)
+            newDate.setSeconds(0)
+            newDate.setMilliseconds(0)
+
+            
+
+          
+
+            
+
+            
+
+
+
+
+
+        }
+
+
+        
 
 
 

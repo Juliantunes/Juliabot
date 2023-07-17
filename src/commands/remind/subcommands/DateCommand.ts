@@ -1,5 +1,6 @@
 import { CacheType, CommandInteraction, SlashCommandSubcommandBuilder } from "discord.js";
 import { Subcommand } from "../../../definitions/Command";
+import { convertDateToUnix } from "../../../utilities/TimeUtils";
 
 export class DateCommand implements Subcommand {
 
@@ -26,10 +27,17 @@ export class DateCommand implements Subcommand {
     receiver(interaction: CommandInteraction): unknown {
         
         if(!interaction.isChatInputCommand()) return;
-        else{
-            interaction.reply('')
-        }
-       
-        return 0;
+
+        const event = interaction.options.getString('event')!
+        const date = interaction.options.getString('date')!
+
+        const unixTimeStamp = convertDateToUnix(date)
+
+        const ScheduledMessage = setTimeout(() => {
+            interaction.reply(event);
+          }, unixTimeStamp);
+
+        return ScheduledMessage ;
+
     }
 }
