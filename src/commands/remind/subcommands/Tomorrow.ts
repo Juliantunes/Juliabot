@@ -1,5 +1,6 @@
-import { SlashCommandSubcommandBuilder, CommandInteraction, CacheType } from "discord.js";
+import { SlashCommandSubcommandBuilder, CommandInteraction, CacheType, TextBasedChannel } from "discord.js";
 import { Subcommand } from "../../../definitions/Command";
+import { scheduleMessage } from "../../../utilities/TimeUtils";
 
 
 export class Tomorrow implements Subcommand{
@@ -62,10 +63,12 @@ export class Tomorrow implements Subcommand{
 
 
         }
-        const ScheduledMessage = setTimeout(() => {
-            interaction.reply(event);
-          }, unixTimeStamp);
 
-        return ScheduledMessage ;
+        interaction.reply({
+            content: "Reminder set",
+            ephemeral: true
+        });
+
+        scheduleMessage(interaction.user.id, unixTimeStamp, interaction.channel as TextBasedChannel, event);
     }
 }
