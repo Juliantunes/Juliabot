@@ -30,23 +30,39 @@ export class DiscordBot {
 
         await (new DBClient()).start();
 
+
         this.client.on('ready', async () => {
-            console.log('JuliasBot is enabled!'); 
+          
         });
 
         const rest = new REST().setToken(process.env.DISCORD_TOKEN ?? "");
-        
+
+        let commandArray: Discord.RESTPostAPIChatInputApplicationCommandsJSONBody[] = []
+        for(const command of this.handler.getCommandData()) {
+           
+            commandArray.push(command.toJSON())
+            
+        }
+
+
+
+
         try{
             await rest.put(
-                Routes.applicationGuildCommands("", ""),
+                Routes.applicationGuildCommands(process.env.CLIENT_ID??"", process.env.GUILD_ID??""),
                 {
-                    body: this.handler.getCommandData()
+                    body: commandArray
                 }
-            )
-        }catch(err){
+            ) 
+            this.client.login(process.env.DISCORD_TOKEN);
+        }catch (err){
+            
+            console.log(err)
 
         }
         
-        this.client.login(process.env.DISCORD_TOKEN);
     }
+
+
+
 }

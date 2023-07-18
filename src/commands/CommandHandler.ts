@@ -1,4 +1,4 @@
-import { Message } from "discord.js";
+import { Message, SlashCommandBuilder } from "discord.js";
 import { CommandObject } from "../definitions/Command";
 import { Hello } from "./hello/Hello";
 import { Remind } from "./remind/Remind";
@@ -6,17 +6,18 @@ import { CommandInteraction } from "discord.js";
 
 export class CommandHandler {
     private commands: CommandObject;
-    private commandDataArray: {}[];
+    private commandDataArray: SlashCommandBuilder[];
 
     constructor() {
         this.commands = {};
         this.commandDataArray = [];
 
-        const hello = new Hello();
-        this.commands[hello.getName()] = hello;
-        this.commandDataArray.push(hello.getCommandData());
+        const remind = new Remind();
+        this.commands[remind.getName()] = remind;
+        this.commandDataArray.push(remind.getCommandData());
 
         /*
+        }
         {
             "hello": Hello Instance
         }
