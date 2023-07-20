@@ -17,6 +17,7 @@ export class Tomorrow implements Subcommand{
                 return option
                     .setName("event")
                     .setDescription("Event to be reminded of")
+                    .setRequired(true)
             })
             .addIntegerOption((option) => {
                 return option
@@ -36,6 +37,7 @@ export class Tomorrow implements Subcommand{
         if(!interaction.isChatInputCommand()) {
             return;
         }
+
         const event = interaction.options.getString("event")!
         const hour = interaction.options.getInteger("hour")
         const minute = interaction.options.getInteger('minute')

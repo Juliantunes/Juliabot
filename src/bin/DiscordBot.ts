@@ -24,15 +24,14 @@ export class DiscordBot {
     }
     
     async enable() {
-        this.client.on("InteractionCreate", (interaction: CommandInteraction) => {
+        this.client.on("interactionCreate", (interaction: Interaction) => {
             this.handler.onInteraction(interaction);
         })
 
         await (new DBClient()).start();
 
-
         this.client.on('ready', async () => {
-          
+            console.log("JuliaBot is logged in");
         });
 
         const rest = new REST().setToken(process.env.DISCORD_TOKEN ?? "");
@@ -44,9 +43,6 @@ export class DiscordBot {
             
         }
 
-
-
-
         try{
             await rest.put(
                 Routes.applicationGuildCommands(process.env.CLIENT_ID??"", process.env.GUILD_ID??""),
@@ -56,9 +52,7 @@ export class DiscordBot {
             ) 
             this.client.login(process.env.DISCORD_TOKEN);
         }catch (err){
-            
             console.log(err)
-
         }
         
     }

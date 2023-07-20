@@ -1,4 +1,4 @@
-import { Message, SlashCommandBuilder } from "discord.js";
+import { Interaction, Message, SlashCommandBuilder } from "discord.js";
 import { CommandObject } from "../definitions/Command";
 import { Hello } from "./hello/Hello";
 import { Remind } from "./remind/Remind";
@@ -31,8 +31,7 @@ export class CommandHandler {
         return this.commandDataArray;
     }
 
-    onInteraction(interaction: CommandInteraction): void{
-        if(!interaction.isCommand()) return;
+    onInteraction(interaction: Interaction): void{
         if(!interaction.isChatInputCommand()) return;
 
         // "!hello world" => ["hello", "world"]
