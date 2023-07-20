@@ -36,7 +36,7 @@ export class Relative implements Subcommand {
             interaction.reply(event);
           }, unixTimeStamp);
 
-        return ScheduledMessage ;
+         ;
 
     }
 }
